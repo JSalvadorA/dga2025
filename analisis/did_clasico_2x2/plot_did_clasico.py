@@ -9,12 +9,28 @@ import argparse
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
 import numpy as np
 import pandas as pd
 
 # Estilo
-plt.style.use("seaborn-v0_8-whitegrid")
-COLORS = {"ALWAYS_IN": "#2E86AB", "SWITCHER": "#A23B72"}
+C_MAIN = "#1B4F72"
+C_ACCENT = "#A10115"
+C_GREY = "#95A5A6"
+COLORS = {"ALWAYS_IN": C_MAIN, "SWITCHER": C_ACCENT}
+
+plt.rcParams.update({
+    "font.family": "sans-serif",
+    "font.sans-serif": ["Roboto", "DejaVu Sans", "Arial"],
+    "font.size": 10,
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+    "axes.grid": True,
+    "grid.alpha": 0.3,
+    "grid.linewidth": 0.5,
+    "figure.facecolor": "white",
+    "axes.facecolor": "white",
+})
 
 
 def load_results(out_dir: Path) -> dict:
@@ -28,7 +44,7 @@ def plot_barras_pre_post(results: dict, out_dir: Path) -> None:
     """Grafico de barras: tasas pre/post por grupo."""
     m = results["manual"]
 
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(6.5, 4.2))
 
     x = np.array([0, 1, 3, 4])
     heights = [
@@ -67,6 +83,7 @@ def plot_barras_pre_post(results: dict, out_dir: Path) -> None:
     ax.set_xticklabels(["Pre\n(2022-24)", "Post\n(2025)", "Pre\n(2022-24)", "Post\n(2025)"], fontsize=11)
     ax.set_ylabel("Tasa cumple_v4 (%)", fontsize=12)
     ax.set_ylim(0, 105)
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=100, decimals=0))
     # Leyenda manual
     from matplotlib.patches import Patch
     legend_elements = [
@@ -79,7 +96,7 @@ def plot_barras_pre_post(results: dict, out_dir: Path) -> None:
     did_val = m["did_manual"] * 100
     ax.text(0.98, 0.05, f"DiD = {did_val:.1f} pp", transform=ax.transAxes,
             ha="right", va="bottom", fontsize=14, fontweight="bold",
-            bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.8))
+            bbox=dict(boxstyle="round", facecolor="#E8F1FA", alpha=0.9))
 
     plt.tight_layout()
     fig.savefig(out_dir / "fig_did_barras_pre_post.png", dpi=150, bbox_inches="tight")
@@ -91,7 +108,7 @@ def plot_did_lines(results: dict, out_dir: Path) -> None:
     """Grafico de lineas: tendencias paralelas (hipoteticas) vs observadas."""
     m = results["manual"]
 
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(6.5, 4.2))
 
     # Datos observados
     years = [2024, 2025]
@@ -110,17 +127,18 @@ def plot_did_lines(results: dict, out_dir: Path) -> None:
     # Flecha DiD
     ax.annotate(
         "", xy=(2025, m["switcher_post"] * 100), xytext=(2025, switch_cf_post),
-        arrowprops=dict(arrowstyle="<->", color="red", lw=2),
+        arrowprops=dict(arrowstyle="<->", color=COLORS["SWITCHER"], lw=2),
     )
     did_val = m["did_manual"] * 100
     ax.text(2025.05, (m["switcher_post"] * 100 + switch_cf_post) / 2,
-            f"DiD\n{did_val:.1f} pp", ha="left", va="center", fontsize=11, color="red", fontweight="bold")
+            f"DiD\n{did_val:.1f} pp", ha="left", va="center", fontsize=11, color=COLORS["SWITCHER"], fontweight="bold")
 
     ax.set_xlim(2023.8, 2025.3)
     ax.set_ylim(-5, 105)
     ax.set_xticks([2024, 2025])
     ax.set_xticklabels(["Pre (2022-2024)", "Post (2025)"], fontsize=12)
-    ax.set_ylabel("Tasa cumple_v4 (%)", fontsize=12)
+    ax.set_ylabel("Tasa cumple_v4 (%)", fontsize=11)
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=100, decimals=0))
     ax.legend(loc="upper left", fontsize=10)
 
     plt.tight_layout()
@@ -133,7 +151,7 @@ def plot_salto_hero(results: dict, out_dir: Path) -> None:
     """Grafico hero: el salto 34% -> 74% para LinkedIn."""
     m = results["manual"]
 
-    fig, ax = plt.subplots(figsize=(12, 7))
+    fig, ax = plt.subplots(figsize=(8.5, 5.0))
 
     # Calculo del indicador agregado (aproximado)
     # Usando pesos aproximados: ALWAYS_IN domina
@@ -145,7 +163,7 @@ def plot_salto_hero(results: dict, out_dir: Path) -> None:
     # Valores aproximados del informe
     values = [33.3, 40.3, 34.7, 74.2]
 
-    colors_bar = ["#5D6D7E", "#5D6D7E", "#5D6D7E", "#E74C3C"]
+    colors_bar = [C_GREY, C_GREY, C_GREY, C_ACCENT]
     bars = ax.bar(years, values, color=colors_bar, edgecolor="black", linewidth=1.5, width=0.6)
 
     # Etiquetas
@@ -156,18 +174,19 @@ def plot_salto_hero(results: dict, out_dir: Path) -> None:
     # Flecha del salto
     ax.annotate(
         "", xy=(2025, 74), xytext=(2024, 35),
-        arrowprops=dict(arrowstyle="-|>", color="#E74C3C", lw=3, mutation_scale=20),
+        arrowprops=dict(arrowstyle="-|>", color=C_ACCENT, lw=3, mutation_scale=20),
     )
-    ax.text(2024.5, 55, "+40 pp", ha="center", va="center", fontsize=16, fontweight="bold", color="#E74C3C",
+    ax.text(2024.5, 55, "+40 pp", ha="center", va="center", fontsize=16, fontweight="bold", color=C_ACCENT,
             rotation=45)
 
     ax.set_ylim(0, 90)
-    ax.set_ylabel("Indicador V4 (%)", fontsize=14)
-    ax.set_xlabel("Año", fontsize=14)
+    ax.set_ylabel("Indicador V4 (%)", fontsize=12)
+    ax.set_xlabel("Año", fontsize=12)
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=100, decimals=0))
     # Anotacion
-    ax.text(0.02, 0.98, "Transición SIGA Escritorio → SIGA Web",
+    ax.text(0.02, 0.98, "Transición SIGA Escritorio -> SIGA Web",
             transform=ax.transAxes, ha="left", va="top", fontsize=11,
-            style="italic", color="#555555")
+            style="italic", color=C_GREY)
 
     plt.tight_layout()
     fig.savefig(out_dir / "fig_salto_hero.png", dpi=150, bbox_inches="tight")

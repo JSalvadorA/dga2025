@@ -28,11 +28,11 @@ FLOWS = {
 }
 
 C_MAIN = "#1B4F72"
-C_ACCENT = "#E74C3C"
-C_GREEN = "#27AE60"
+C_ACCENT = "#A10115"
+C_GREEN = "#1B4F72"
 C_GREY = "#95A5A6"
-C_LIGHT_GREEN = "#A9DFBF"
-C_LIGHT_RED = "#F5B7B1"
+C_LIGHT_GREEN = "#D6EAF8"
+C_LIGHT_RED = "#E2B2B8"
 
 plt.rcParams.update({
     "font.family": "sans-serif",

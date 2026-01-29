@@ -22,11 +22,11 @@ FIGS = OUT / "figures"
 FIGS.mkdir(parents=True, exist_ok=True)
 
 C_BEHAVIOR = "#1B4F72"
-C_COMPOSITION = "#F39C12"
+C_COMPOSITION = "#A10115"
 C_TOTAL = "#2C3E50"
-C_ACCENT = "#E74C3C"
-C_POSITIVE = "#27AE60"
-C_NEGATIVE = "#E74C3C"
+C_ACCENT = "#A10115"
+C_POSITIVE = "#1B4F72"
+C_NEGATIVE = "#A10115"
 
 plt.rcParams.update({
     "font.family": "sans-serif",

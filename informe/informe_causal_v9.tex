@@ -1,15 +1,16 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc} 
+\usepackage[T1]{fontenc}
 \usepackage{lmodern}
-\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage[a4paper,top=2.5cm,bottom=2.0cm,left=2.5cm,right=2.5cm,footskip=0.9cm]{geometry}
 \usepackage{setspace}
 \usepackage{parskip}
 \usepackage{enumitem}
 \usepackage{hyperref}
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{array}
 \usepackage{siunitx}
 \usepackage[table]{xcolor}
 \usepackage{amsmath}
@@ -18,6 +19,7 @@
 \usepackage{tcolorbox}
 \usepackage{caption}
 \usepackage{needspace}
+\usepackage{amssymb} % para checkmark
 
 % Caja de analisis con fondo igual al resumen ejecutivo
 \newtcolorbox{analisis}{
@@ -32,7 +34,49 @@
   fontupper=\small
 }
 
-\hypersetup{colorlinks=true,linkcolor=black,urlcolor=black,hypertexnames=false}
+% Caja de honestidad (rosa)
+\newtcolorbox{honestidad}{
+  colback=red!5,
+  colframe=red!40!black,
+  boxrule=0.5pt,
+  arc=3pt,
+  left=6pt,
+  right=6pt,
+  top=4pt,
+  bottom=4pt,
+  fontupper=\small,
+  title={\textbf{Honestidad metodol\'ogica}}
+}
+
+% Caja de extensibilidad (verde)
+\newtcolorbox{extensibilidad}{
+  colback=green!5,
+  colframe=green!40!black,
+  boxrule=0.5pt,
+  arc=3pt,
+  left=6pt,
+  right=6pt,
+  top=4pt,
+  bottom=4pt,
+  fontupper=\small,
+  title={\textbf{Extensibilidad del an\'alisis}}
+}
+
+% Caja de experiencia (azul)
+\newtcolorbox{experiencia}{
+  colback=blue!5,
+  colframe=blue!40!black,
+  boxrule=0.5pt,
+  arc=3pt,
+  left=6pt,
+  right=6pt,
+  top=4pt,
+  bottom=4pt,
+  fontupper=\small,
+  title={\textbf{Experiencia relacionada}}
+}
+
+\hypersetup{colorlinks=true,linkcolor=blue!60!black,urlcolor=blue!60!black,hypertexnames=false}
 \urlstyle{same}
 \Urlmuskip=0mu plus 1mu
 \def\UrlBreaks{\do\/\do-\do\_\do\.\do\:\do\?}
@@ -43,42 +87,119 @@
 \setlength{\textfloatsep}{8pt}
 \setlength{\intextsep}{6pt}
 \newcommand{\placeholder}[1]{\textcolor{gray}{\textit{[#1]}}}
-\newcommand{\figinclude}[1]{\includegraphics[width=\textwidth]{\detokenize{../outputs/figuras_finales/#1}}}
+\newcommand{\figinclude}[1]{\includegraphics[width=0.9\textwidth]{\detokenize{../outputs/figuras_finales/#1}}}
+
+% Simbolos de check y X
+\newcommand{\cmark}{\textcolor{green!60!black}{\checkmark}}
+\newcommand{\xmark}{\textcolor{red!70!black}{$\times$}}
 
 \begin{document}
 
 \begin{center}
-{\Large\textbf{Informe t\'ecnico: An\'alisis del salto del Indicador V4 (cumple\_v4), 2022--2025}}\\[0.6em]
-{\normalsize\textbf{Automatizaci\'on de datos presupuestales y an\'alisis causal del salto 2025 (SIGA Web -- CMN)}}\\[0.2em]
+{\Large\textbf{An\'alisis del salto del Indicador 1 del PAR del SNA, 2022--2025}}\\[0.6em]
+{\normalsize\textbf{Automatizaci\'on de datos presupuestales y diagn\'ostico del salto 2025 (SIGA Escritorio $\rightarrow$ SIGA Web)}}\\[0.2em]
 {\small\textbf{Fecha: Enero 2026}}\\[0.3em]
 \end{center}
 
+%% ============================================================================
+%% RESUMEN EJECUTIVO
+%% ============================================================================
 \section*{Resumen Ejecutivo}
 
 \begin{tcolorbox}[colback=yellow!10, colframe=yellow!50!black, boxrule=0.5pt, arc=3pt]
-\textbf{Hallazgo central:} El \textbf{79\%} del salto 2024$\rightarrow$2025 en el Indicador V4
+\textbf{Hallazgo central:} El \textbf{79\%} del salto 2024$\rightarrow$2025 en el Indicador 1 -- todas las fases del CMN
 se explica porque las mismas entidades (ALWAYS\_IN) mejoraron su cumplimiento,
 no por la entrada de nuevas entidades al padr\'on.
 \end{tcolorbox}
 
 \begin{itemize}[leftmargin=1cm, itemsep=0.3em]
-  \item \textbf{Magnitud del salto:} De 33\% (2022--2024) a 74\% (2025), equivalente a +40 pp en un a\~no.
+  \item \textbf{Magnitud del salto:} De $\sim$34\% (2024) a 74\% (2025), equivalente a +40 pp en un a\~no.
   \item \textbf{Descomposici\'on Oaxaca-Blinder:} 78.8\% comportamiento (ALWAYS\_IN) + 21.2\% composici\'on (ENTRY).
   \item \textbf{Efecto generalizado:} Todos los quintiles presupuestales (Q1--Q5) muestran saltos $>$65 pp.
-  \item \textbf{Hip\'otesis:} La transici\'on SIGA Escritorio $\rightarrow$ SIGA Web simplific\'o el registro del CMN.
+  \item \textbf{Hip\'otesis:} La transici\'on SIGA Escritorio $\rightarrow$ SIGA Web redujo fricciones en el registro del CMN.
   \item \textbf{Limitaci\'on principal:} An\'alisis descriptivo; no hay grupo control puro para inferencia causal estricta.
 \end{itemize}
 
 \textbf{M\'etodos empleados:} Event Study (TWFE), DiD cl\'asico y con PSM, descomposici\'on Oaxaca-Blinder,
 an\'alisis de heterogeneidad por tama\~no presupuestal, tests de placebo.
 
+%% ============================================================================
+%% TABLA DE ARQUITECTURA DE EVIDENCIA (Cuadro 1)
+%% ============================================================================
 \vspace{0.5em}
-\hrule
+\begin{table}[H]
+\centering
+\caption{Estructura de la evidencia}
+\label{tab:arquitectura_evidencia}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.1}
+\hspace*{-0.10\textwidth}
+\begin{minipage}{1.18\textwidth}
+\centering
+\begin{tabular}{@{}l l l l l@{}}
+\toprule
+Secci\'on & Pregunta & M\'etodo & Resultado & Car\'acter \\
+\midrule
+III.1 &
+\parbox[t]{4.8cm}{\raggedright\textquestiondown Hubo salto?} &
+\parbox[t]{3.4cm}{\raggedright Event Study (year dummies)} &
+\parbox[t]{6.6cm}{\raggedright $\beta_{2025}=0.75$ vs $\beta_{2023}=0.08$} &
+Descriptivo \\
+III.2 &
+\parbox[t]{4.8cm}{\raggedright\textquestiondown De d\'onde viene?} &
+\parbox[t]{3.4cm}{\raggedright Oaxaca-Blinder} &
+\parbox[t]{6.6cm}{\raggedright 79\% comportamiento, 21\% composici\'on} &
+Contable \\
+III.3 &
+\parbox[t]{4.8cm}{\raggedright\textquestiondown Qui\'enes saltan m\'as?} &
+\parbox[t]{3.4cm}{\raggedright Interacciones por quintil PIA} &
+\parbox[t]{6.6cm}{\raggedright Todos $>$65pp, Q4 +9pp vs Q1} &
+Exploratorio \\
+III.5 &
+\parbox[t]{4.8cm}{\raggedright\textquestiondown Diferencial entre grupos?} &
+\parbox[t]{3.4cm}{\raggedright DiD cl\'asico + PSM} &
+\parbox[t]{6.6cm}{\raggedright $\delta=-9.2$pp (SWITCHER salta menos)} &
+Cuasi-exp. \\
+III.6 &
+\parbox[t]{4.8cm}{\raggedright\textquestiondown Es cre\'ible el DiD?} &
+\parbox[t]{3.4cm}{\raggedright Placebos temporales} &
+\parbox[t]{6.6cm}{\raggedright Pre-trends NO paralelos} &
+Validaci\'on \\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\renewcommand{\arraystretch}{1.0}
+\end{table}
 \vspace{0.5em}
 
+%% ============================================================================
+%% SINTESIS VISUAL (DASHBOARD)
+%% ============================================================================
+\vspace{0.2em}
+\begin{figure}[H]
+\centering
+\figinclude{dashboard_resumen_latex.png}
+\caption{S\'intesis visual: los cuatro componentes del an\'alisis. Ver Cuadro~\ref{tab:arquitectura_evidencia} para la estructura metodol\'ogica.}
+\label{fig:dashboard_resumen}
+\end{figure}
+
+\begin{analisis}
+\textbf{Figura~\ref{fig:dashboard_resumen}:} Cada panel corresponde a una pregunta del Cuadro~\ref{tab:arquitectura_evidencia}:
+(1)~Event Study confirma salto abrupto 2025 ($\beta=0.75$) muy superior a tendencia previa ($\beta\approx0.08$);
+(2)~Oaxaca-Blinder atribuye 78.8\% del salto a cambio de comportamiento (ALWAYS\_IN) y 21.2\% a composici\'on;
+(3)~Heterogeneidad muestra efecto generalizado en todos los quintiles con diferencial moderado
+(Q4 salta 9~pp m\'as que Q1);
+(4)~Transici\'on 2024$\rightarrow$2025 con flujo neto de +1,213 entidades hacia cumplimiento.
+\textbf{Detalles de cada componente:} Secciones~\ref{sec:event_study}--\ref{sec:placebo}.
+\end{analisis}
+%% ============================================================================
+%% I. MOTIVACION
+%% ============================================================================
 \section*{I. Motivaci\'on}
-En 2025 se observa un salto abrupto en el cumplimiento del Indicador 1, variante V4
-(cumple\_v4): de $\sim$33\% (2022--2024) a 74\% (2025). Este indicador resume el
+En este informe se analiza la variante V4 del Indicador 1 del PAR del SNA: el porcentaje de entidades con SIGA que transmiten/registran su CMN en todas las fases (Identificaci\'on; Clasificaci\'on y Priorizaci\'on; Consolidaci\'on y Aprobaci\'on), respecto del total de entidades con SIGA.
+
+En 2025 se observa un salto abrupto en el cumplimiento del Indicador 1 -- todas las fases del CMN
+(cumple\_v4): de $\sim$34\% (2024) a 74\% (2025)---tras rondar el 33--40\% entre 2022 y 2024. Este indicador resume el
 cumplimiento integral de las tres fases de la PMBSO (programaci\'on del CMN) en el
 marco de la Directiva N\textsuperscript{o} 0007-2025-EF/54.01.
 
@@ -93,47 +214,30 @@ las limitaciones de identificaci\'on.
 
 El informe descompone el salto en:
 \begin{itemize}
-  \item cambio en el comportamiento de las mismas entidades (\textbf{ALWAYS\_IN}:
-        UEs con SIGA=SI en 2022--2024 y en 2025),
-  \item cambio por transici\'on de estado (\textbf{SWITCHER}: UEs con SIGA=NO en
-        2022--2024 que pasan a SIGA=SI en 2025),
-  \item cambio por composici\'on del padr\'on (\textbf{ENTRY}: UEs nuevas que solo
-        aparecen en el padr\'on 2025),
+  \item cambio en el comportamiento de las mismas entidades -- \textbf{ALWAYS\_IN}:
+        UEs (unidades ejecutoras) con \mbox{SIGA=SI} en 2022--2024 y en 2025,
+  \item cambio por transici\'on de estado -- \textbf{SWITCHER}: UEs con \mbox{SIGA=NO} en
+        2022--2024 que pasan a \mbox{SIGA=SI} en 2025,
+  \item cambio por composici\'on del padr\'on -- \textbf{ENTRY}: UEs nuevas que solo
+        aparecen en el padr\'on 2025,
   \item heterogeneidad por tama\~no presupuestal (PIA/PIM).
 \end{itemize}
+Adicionalmente se reportan modelos complementarios (DiD y outcome continuo) y
+tests de placebo como validaci\'on; no forman parte de la descomposici\'on del salto.
 
-\textbf{Nota:} SWITCHER y ENTRY son grupos conceptualmente distintos (transici\'on de estado
-vs entrada al padr\'on), aunque num\'ericamente casi iguales (607 vs 608 UEs) debido a
-filtros de datos.
-
-El objetivo es ofrecer evidencia trazable para el diagn\'ostico del salto 2025,
-con un enfoque descriptivo y metodol\'ogicamente transparente.
-
-\begin{table}[H]
-\centering
-\caption{Indicador 1 por variante, 2022--2025 (columna 2025 resaltada)}
-\label{tab:ind1_v4_motivacion}
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcccc}
-\toprule
-Variante & 2022 & 2023 & 2024 & \cellcolor{yellow!20}\textbf{2025} \\
-\midrule
-V1 -- Identificaci\'on & 39.46\% & 47.96\% & 43.90\% & \cellcolor{yellow!20}78.05\%\\
-V2 -- Clasificaci\'on y Priorizaci\'on & 39.32\% & 46.61\% & 38.17\% & \cellcolor{yellow!20}75.52\%\\
-V3 -- Consolidaci\'on y Aprobaci\'on & 33.71\% & 40.71\% & 35.23\% & \cellcolor{yellow!20}74.29\%\\
-V4 -- Todas las fases (intersecci\'on) & 33.27\% & 40.34\% & 34.68\% & \cellcolor{yellow!20}\textbf{74.22\%}\\
-\bottomrule
-\end{tabular*}
-\end{table}
+\textbf{Nota:} ENTRY es composici\'on porque son UEs nuevas que ingresan al padr\'on en 2025.
+SWITCHER es transici\'on porque cambia de SIGA=NO (2022--2024) a SIGA=SI en 2025.
+Son grupos distintos, aunque num\'ericamente cercanos (607 vs 608 UEs) por filtros de datos.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{\detokenize{../../results/latex_cuadros_figuras_ind1/figura1_evolucion_indicador_v4.png}}
-\caption{Evoluci\'on del Indicador 1, variante V4 (2022--2025).}
+\caption{Evoluci\'on del Indicador 1 -- todas las fases del CMN (2022--2025).}
 \label{fig:v4_evolucion}
 \end{figure}
 
 \Needspace{10\baselineskip}
-\subsection*{I.1 Modificaci\'on normativa (DL 1439)}
+\subsection*{I.1 Normativa (DL 1439)}
 El marco legal establece dos hechos clave: (i) el registro es obligatorio para el sector p\'ublico,
 ``El registro de la informaci\'on relacionada con el Sistema Nacional de Abastecimiento es de uso
 obligatorio por parte de las entidades del Sector P\'ublico'' (Art. 25); y (ii) la implementaci\'on
@@ -142,6 +246,9 @@ entidades del Sector P\'ublico, de acuerdo a las directivas que emita la Direcci
 Abastecimiento'' (Segunda DCF). Esto sustenta que el cambio 2025 ocurre dentro de un mandato de
 obligatoriedad con adopci\'on progresiva.
 
+%% ============================================================================
+%% II. PRE-ANALISIS
+%% ============================================================================
 \section*{II. Pre-an\'alisis (datos y preparaci\'on)}
 \textbf{Fuentes principales:}
 \begin{itemize}
@@ -167,14 +274,24 @@ obligatoriedad con adopci\'on progresiva.
   \item \textbf{Quintiles de PIA/PIM}: definidos con PIA/PIM 2024 (estables).
 \end{itemize}
 
-\clearpage
+\textbf{Chequeos previos:} consistencia de conteos, deduplicaci\'on por entidad/a\~no,
+normalizaci\'on de \texttt{sec\_ejec}, y controles b\'asicos sobre PIA/PIM.
+
+%% ============================================================================
+%% III. RESULTADOS PRINCIPALES
+%% ============================================================================
 \section*{III. Resultados principales}
-\textbf{Nota de alcance:} los modelos DiD/PSM se estiman solo con ALWAYS\_IN y SWITCHER
-(panel T1); el grupo ENTRY se utiliza en la descomposici\'on Oaxaca-Blinder.
+\textbf{Nota de alcance y universos (municipalidades):} todo el informe se restringe a
+municipalidades. El panel T1 (adopci\'on SIGA Web) define los grupos
+\texttt{ALWAYS\_IN} y \texttt{SWITCHER}; aqu\'i se estiman Event Study, DiD y PSM en el
+mismo universo (n=1,891). El panel T2 (programaci\'on CMN) se usa para construir
+\texttt{cumple\_v4} y como soporte diagn\'ostico. El grupo \texttt{ENTRY} se utiliza solo
+en Oaxaca-Blinder.
 
 \Needspace{10\baselineskip}
 \subsection*{III.1 Event Study (cumple\_v4)}
-\textbf{Parte A (descriptivo, ALWAYS\_IN):} el salto 2025 es masivo y supera la
+\label{sec:event_study}
+\textbf{Event Study descriptivo (ALWAYS\_IN):} el salto 2025 es masivo y supera la
 tendencia previa 2022--2024.
 
 \begin{table}[H]
@@ -193,8 +310,8 @@ SWITCHER & 0.0049 & 0.6046 & +60 pp\\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{\detokenize{../outputs/figuras_finales/fig1_coeff_partA_latex.png}}
-\caption{Event Study (Parte A): coeficientes por año en ALWAYS\_IN.}
+\figinclude{fig1_coeff_partA_latex.png}
+\caption{Event Study: coeficientes por a\~no en ALWAYS\_IN.}
 \label{fig:es_partA_coeff}
 \end{figure}
 
@@ -202,11 +319,13 @@ SWITCHER & 0.0049 & 0.6046 & +60 pp\\
 \textbf{Figura~\ref{fig:es_partA_coeff}:} Los coeficientes $\beta_{2023}=0.08$ y $\beta_{2024}=0.09$ muestran una tendencia
 positiva leve en 2022--2024. El coeficiente $\beta_{2025}=0.75$ representa un salto abrupto de 75 pp,
 8 veces mayor que la tendencia previa. Esto confirma que 2025 es un a\~no at\'ipico.
+\textbf{Significancia:} los coeficientes 2023--2025 son estad\'isticamente distintos de cero
+(IC 95\% no cruzan cero).
 \end{analisis}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{\detokenize{../outputs/figuras_finales/fig2_parallel_trends_latex.png}}
+\includegraphics[width=0.9\textwidth]{\detokenize{../outputs/figuras_finales/fig2_parallel_trends_latex.png}}
 \caption{Event Study: tendencias por grupo (ALWAYS\_IN vs SWITCHER).}
 \label{fig:es_parallel_trends}
 \end{figure}
@@ -217,40 +336,27 @@ SWITCHER (l\'inea inferior) parte de casi 0\% y salta a 60\% en 2025. Ambos grup
 el salto 2025, pero ALWAYS\_IN mantiene tasas consistentemente m\'as altas en todo el per\'iodo.
 \end{analisis}
 
-\textbf{Parte B (contraste SWITCHER vs ALWAYS\_IN):} los SWITCHER saltan menos en
-t\'erminos absolutos. El contraste es descriptivo, no causal, debido a
-pre-trends no paralelos y problemas num\'ericos (SE NaN, $R^2$ negativo).
-Los coeficientes se reportan solo como descriptivos (sin inferencia).
-
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{\detokenize{../outputs/figuras_finales/fig3_coeff_partB_latex.png}}
-\caption{Event Study (Parte B): contraste SWITCHER vs ALWAYS\_IN.}
-\label{fig:es_partB_coeff}
-\end{figure}
-
-\begin{analisis}
-\textbf{Figura~\ref{fig:es_partB_coeff}:} Los coeficientes de contraste ($\beta_{switcher,t}$) son negativos en todos los a\~nos:
-$-0.07$ (2023), $-0.06$ (2024), $-0.10$ (2025). Esto indica que SWITCHER est\'a sistem\'aticamente
-por debajo de ALWAYS\_IN. El coeficiente 2025 m\'as negativo ($-0.10$) refleja que SWITCHER
-salta 10 pp MENOS que ALWAYS\_IN en t\'erminos relativos.
-\end{analisis}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.85\textwidth]{\detokenize{../outputs/figuras_finales/fig10_transition_latex.png}}
+\figinclude{fig10_transition_t1_latex.png}
 \caption{Transici\'on 2024$\rightarrow$2025 en cumple\_v4 (salto de entidades).}
 \label{fig:transition_2024_2025}
 \end{figure}
 
 \begin{analisis}
-\textbf{Figura~\ref{fig:transition_2024_2025}:} Matriz de transici\'on: 1,104 entidades pasaron de no\_cumple a cumple (cuadrante
-inferior-izquierdo), explicando el salto masivo. Solo 150 entidades retrocedieron (cumple$\rightarrow$no\_cumple).
-El flujo neto positivo de 954 entidades (+1,104$-$150) representa el grueso del incremento 2025.
+\textbf{Figura~\ref{fig:transition_2024_2025}:} Matriz de transici\'on alineada al
+universo T1 municipal (\texttt{ALWAYS\_IN}+\texttt{SWITCHER}, n=1,891). En este
+universo, 1,216 entidades pasan de no\_cumple a cumple y solo 3 retroceden
+(cumple$\rightarrow$no\_cumple), para un flujo neto de +1,213.
+
+La matriz completa es: no\_cumple$\rightarrow$cumple=1,216;
+no\_cumple$\rightarrow$no\_cumple=380; cumple$\rightarrow$cumple=292;
+cumple$\rightarrow$no\_cumple=3.
 \end{analisis}
 
 \Needspace{10\baselineskip}
 \subsection*{III.2 Oaxaca-Blinder}
+\label{sec:oaxaca}
 \textbf{Descomposici\'on agregada (2024 $\rightarrow$ 2025):}
 \begin{table}[H]
 \centering
@@ -276,22 +382,8 @@ Composici\'on (ENTRY) & 12.09 & 21.2\%\\
 \begin{analisis}
 \textbf{Figura~\ref{fig:oaxaca_waterfall}:} Gr\'afico waterfall mostrando la descomposici\'on del salto 2024$\rightarrow$2025:
 el componente ``comportamiento'' (barra azul) aporta 44.9 pp, mientras que ``composici\'on''
-(barra naranja) aporta 12.1 pp. El salto total de 57 pp est\'a dominado por cambios dentro
+(barra roja) aporta 12.1 pp. El salto total de 57 pp est\'a dominado por cambios dentro
 de las mismas entidades, no por entrada de nuevas.
-\end{analisis}
-
-\begin{figure}[H]
-\centering
-\figinclude{fig5_share_2025_latex.png}
-\caption{Oaxaca-Blinder 2024$\rightarrow$2025: participaci\'on del salto por componente.}
-\label{fig:oaxaca_share}
-\end{figure}
-
-\begin{analisis}
-\textbf{Figura~\ref{fig:oaxaca_share}:} Gr\'afico de torta: 78.8\% del salto corresponde a ``comportamiento''
-(ALWAYS\_IN mejor\'o su tasa de 22.7\% a 88.9\%) y 21.2\% a ``composici\'on'' (entrada de
-608 nuevas entidades con tasa 60.4\%). Conclusi\'on: el driver principal es el cambio
-interno, no la recomposici\'on del padr\'on.
 \end{analisis}
 
 \begin{figure}[H]
@@ -314,11 +406,13 @@ La descomposici\'on individual con PIA/PIM tiene $R^2$ muy bajo ($<$2\%), lo que
 que el salto se asocia a factores no observados (coherente con el cambio de
 plataforma en 2025).
 
-\textbf{Nota:} ENTRY (608 UEs) y SWITCHER (607 UEs) son grupos distintos
-(composici\'on vs transici\'on SIGA), aunque num\'ericamente casi iguales.
+\textbf{Nota:} ENTRY es composici\'on porque son UEs nuevas que ingresan al padr\'on en 2025.
+SWITCHER es transici\'on porque cambia de SIGA=NO (2022--2024) a SIGA=SI en 2025.
+Son grupos distintos, aunque num\'ericamente cercanos (607 vs 608 UEs).
 
 \Needspace{10\baselineskip}
 \subsection*{III.3 Heterogeneidad por tama\~no (PIA/PIM)}
+\label{sec:heterogeneidad}
 \textbf{Hallazgo:} el salto es generalizado y la heterogeneidad es moderada.
 
 \begin{table}[H]
@@ -363,8 +457,8 @@ Heterogeneidad moderada; el salto es generalizado.
 \begin{analisis}
 \textbf{Figura~\ref{fig:quintile_interactions}:} Coeficientes de interacci\'on (diferencial vs Q1): Q2 y Q3 no son estad\'isticamente
 distintos de Q1 (IC cruza cero). Q4 muestra +9.1 pp (significativo, $p<0.05$) y Q5 muestra +6.7 pp
-(marginalmente significativo). Las entidades medianas-grandes (Q4) se benefician ligeramente m\'as
-del cambio de plataforma.
+(marginalmente significativo). Las entidades medianas-grandes (Q4) muestran un diferencial positivo
+respecto al grupo base.
 \end{analisis}
 
 \begin{figure}[H]
@@ -383,8 +477,9 @@ generalizado, no focalizado en un segmento espec\'ifico.
 
 \Needspace{10\baselineskip}
 \subsection*{III.4 Diagn\'osticos adicionales}
+\label{sec:diagnosticos}
 
-\textbf{F-test de tendencia previa en ALWAYS\_IN (Event Study Parte A):}
+\textbf{F-test de tendencia previa en ALWAYS\_IN (Event Study):}
 \begin{itemize}
   \item $H_0$: $\beta_{2023} = \beta_{2024} = 0$ (sin tendencia previa)
   \item Resultado: Wald = 130.68, $p < 0.001$ $\Rightarrow$ Se rechaza $H_0$.
@@ -410,25 +505,8 @@ Composici\'on & 12.09 & [10.8, 13.3]\\
 Ambos componentes tienen IC que no incluyen cero, confirmando la robustez de la descomposici\'on.
 
 \Needspace{10\baselineskip}
-\subsection*{III.5 Resumen visual}
-\begin{figure}[H]
-\centering
-\figinclude{dashboard_resumen_latex.png}
-\caption{Panel resumen de resultados principales.}
-\label{fig:dashboard_resumen}
-\end{figure}
-
-\begin{analisis}
-\textbf{Figura~\ref{fig:dashboard_resumen} (Dashboard):} S\'intesis visual de los tres componentes del an\'alisis:
-(1) Event Study confirma salto abrupto 2025 ($\beta=0.75$) muy superior a tendencia previa ($\beta\approx0.08$);
-(2) Oaxaca-Blinder atribuye 78.8\% del salto a cambio de comportamiento (ALWAYS\_IN) y 21.2\% a composici\'on;
-(3) Heterogeneidad muestra efecto generalizado en todos los quintiles con diferencial moderado
-(Q4 salta 9 pp m\'as que Q1). Conclusi\'on integrada: el salto 2025 es un hecho robusto,
-dominado por cambios internos y no por recomposici\'on del padr\'on.
-\end{analisis}
-
-\Needspace{10\baselineskip}
-\subsection*{III.6 Modelos complementarios (DiD y outcome continuo)}
+\subsection*{III.5 Modelos complementarios (DiD y outcome continuo)}
+\label{sec:did}
 \textbf{Prop\'osito:} corroborar el patr\'on del salto 2025 con
 especificaciones alternativas, manteniendo el car\'acter descriptivo
 del an\'alisis (no causal estricto).
@@ -450,7 +528,7 @@ DiD FE (outcome continuo) & y\_exec\_pct & -0.29 & 0.51 \\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth]{\detokenize{../did_clasico_2x2/outputs/fig_did_lines.png}}
+\includegraphics[width=0.9\textwidth]{\detokenize{../did_clasico_2x2/outputs/fig_did_lines.png}}
 \caption{DiD cl\'asico: SWITCHER vs ALWAYS\_IN con contrafactual.}
 \label{fig:did_lines}
 \end{figure}
@@ -465,7 +543,7 @@ SWITCHER salta menos de lo que hubiera saltado bajo tendencias paralelas.
 \begin{figure}[H]
 \centering
 \IfFileExists{../did_psm/outputs/fig_psm_balance.png}{
-  \includegraphics[width=0.85\textwidth]{\detokenize{../did_psm/outputs/fig_psm_balance.png}}
+  \includegraphics[width=0.9\textwidth]{\detokenize{../did_psm/outputs/fig_psm_balance.png}}
 }{
   \placeholder{Figura PSM balance no disponible en outputs.}
 }
@@ -484,7 +562,7 @@ no observables (capacidad t\'ecnica, experiencia previa) explican la diferencia.
 \begin{figure}[H]
 \centering
 \IfFileExists{../did_outcome_continuo/outputs/fig_compare_outcomes.png}{
-  \includegraphics[width=0.85\textwidth]{\detokenize{../did_outcome_continuo/outputs/fig_compare_outcomes.png}}
+  \includegraphics[width=0.9\textwidth]{\detokenize{../did_outcome_continuo/outputs/fig_compare_outcomes.png}}
 }{
   \placeholder{Figura comparaci\'on de outcomes no disponible en outputs.}
 }
@@ -505,7 +583,8 @@ una ca\'ida en desempe\~no presupuestal asociada al cambio.
 \end{analisis}
 
 \Needspace{10\baselineskip}
-\subsection*{III.7 Tests de Placebo (validaci\'on DiD)}
+\subsection*{III.6 Tests de Placebo (validaci\'on DiD)}
+\label{sec:placebo}
 \textbf{Prop\'osito:} verificar la credibilidad del DiD mediante pruebas de falsificaci\'on
 (Cunningham, 2021, cap. 9.5). Se reestima el DiD en escenarios donde \textbf{no deber\'ia
 haber efecto}; si aparece ``efecto'', sugiere problemas de identificaci\'on.
@@ -521,7 +600,7 @@ Test & $\delta$ & SE & $p$-value & Significativo \\
 \midrule
 Placebo 2023 & $-0.077$ & 0.015 & $<0.001$ & S\'i $\dagger$ \\
 Placebo 2024 & $-0.045$ & 0.014 & 0.002 & S\'i $\dagger$ \\
-\textbf{REAL 2025} & $-0.092$ & 0.023 & $<0.001$ & \textbf{S\'i} \\
+\textbf{DiD 2025} & $-0.092$ & 0.023 & $<0.001$ & \textbf{S\'i} \\
 \bottomrule
 \end{tabular*}
 \end{table}
@@ -530,7 +609,7 @@ $\dagger$ Advertencia: placebos significativos indican pre-trends no paralelos.
 \textbf{Interpretaci\'on:} Los placebos temporales son significativos, lo que confirma
 que SWITCHER ya estaba por debajo de ALWAYS\_IN antes de 2025. Sin embargo, el efecto
 2025 ($-9.2$ pp) es \textbf{mayor} que los placebos ($-7.7$ y $-4.5$ pp), sugiriendo
-que algo adicional ocurri\'o en 2025, posiblemente la transici\'on SIGA.
+que algo adicional ocurri\'o en 2025, coincidente con la transici\'on SIGA.
 
 \textbf{B) Placebo outcome:} usar y\_exec\_pct (ejecuci\'on presupuestal), que no
 deber\'ia reaccionar al tratamiento.
@@ -551,6 +630,9 @@ como efecto causal puro. La brecha entre grupos exist\'ia antes de 2025, aunque 
 ampli\'o con la transici\'on.
 \end{analisis}
 
+%% ============================================================================
+%% IV. LIMITACIONES
+%% ============================================================================
 \section*{IV. Limitaciones}
 \begin{itemize}
   \item El Event Study es descriptivo; no hay grupo control puro para ALWAYS\_IN.
@@ -562,13 +644,71 @@ ampli\'o con la transici\'on.
   \item El outcome continuo (ejecuci\'on presupuestal) no mide directamente la adopci\'on de SIGA;
         es un proxy complementario.
   \item Regresi\'on Discontinua (RD) fue evaluada y descartada: no existe running variable
-        continua con cutoff significativo (ver viabilidad\_RD.md).
+        continua con cutoff significativo.
 \end{itemize}
 
-\section*{VI. Conclusiones}
+%% ============================================================================
+%% V. HONESTIDAD
+%% ============================================================================
+\section*{V. Lo que puedo afirmar (con honestidad cient\'ifica)}
+
+\begin{honestidad}
+Los tests de placebo revelan que SWITCHER ya estaba por debajo de ALWAYS\_IN antes de 2025
+(pre-trends no paralelos). Esto impide afirmar causalidad estricta. El salto es un
+\textbf{hecho robusto}; lo que no podemos afirmar es que SIGA Web lo \textbf{caus\'o}.
+\end{honestidad}
+
+\vspace{0.5em}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{cl}
+\toprule
+& \textbf{Afirmaci\'on} \\
+\midrule
+\cmark & El salto de $\sim$34\% a 74\% es un \textbf{hecho robusto y generalizado} \\
+\cmark & El driver principal es cambio interno (ALWAYS\_IN), no composici\'on \\
+\cmark & SWITCHER salt\'o menos que ALWAYS\_IN (diferencial descriptivo de $\sim$9pp) \\
+\cmark & No hay evidencia de degradaci\'on operativa (placebo y\_exec\_pct $\approx$ 0) \\
+\xmark & No puedo afirmar que SIGA Web \textbf{caus\'o} el salto (pre-trends no paralelos) \\
+\xmark & No puedo separar limpiamente el efecto de la tendencia previa \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%% ============================================================================
+%% VI. EXTENSIBILIDAD
+%% ============================================================================
+\section*{VI. Extensibilidad y trabajo futuro}
+
+\begin{extensibilidad}
+\begin{itemize}[leftmargin=0.8cm, itemsep=0.3em]
+  \item \textbf{Gobiernos Regionales y otros sectores:} El pipeline es parametrizable.
+        Ajustando la ruta de scraping, se puede replicar para GR, Salud, Educaci\'on, etc.
+  \item \textbf{Indicador 2 (desviaci\'on CMN vs ejecuci\'on):} Datos procesados disponibles
+        de programaci\'on vs \'ordenes de servicio devengadas. El cumplimiento promedio
+        pas\'o de 6.2\% (2022) a 16\% (2023-2024). An\'alisis pendiente.
+  \item \textbf{Pipelines trazables:} Constru\'i pipelines modulares (p0 $\rightarrow$ p9)
+        con configuraci\'on centralizada, particionamiento por a\~no y logs de auditor\'ia.
+\end{itemize}
+\end{extensibilidad}
+
+\begin{experiencia}
+Durante mi paso por SUNASS, apliqu\'e el mismo enfoque de integraci\'on de datos y
+modelado relacional usando datos de Sedapal: integr\'e m\'as de 100 millones de registros
+(2021: 26.77M; 2022: 36.23M; 2023: 37.66M), constru\'i un modelo relacional en PostgreSQL
+(raw $\rightarrow$ dwh $\rightarrow$ mart, tablas particionadas, ETL en Python), optimizado
+para medidas DAX de alto desempe\~no y dashboards, garantizando trazabilidad desde la
+fuente hasta la visualizaci\'on.
+\end{experiencia}
+
+%% ============================================================================
+%% VII. CONCLUSIONES
+%% ============================================================================
+\section*{VII. Conclusiones}
 
 \begin{enumerate}[leftmargin=1cm]
-  \item \textbf{Salto robusto:} El incremento de $\sim$33\% a 74\% en cumple\_v4 (2025)
+  \item \textbf{Salto robusto:} El incremento de $\sim$34\% a 74\% en cumple\_v4 (2025)
         es un hecho descriptivo s\'olido, confirmado por m\'ultiples m\'etodos.
 
   \item \textbf{Driver principal:} El 79\% del salto se explica por cambio de
@@ -578,20 +718,25 @@ ampli\'o con la transici\'on.
         $>$65 pp; heterogeneidad moderada (Q4 salta 9 pp m\'as que Q1).
 
   \item \textbf{Sin degradaci\'on operativa:} El placebo sobre ejecuci\'on presupuestal
-        es no significativo, sugiriendo que el cambio no afect\'o el desempe\~no.
+        es no significativo; no se observa deterioro en el desempe\~no presupuestal.
 
   \item \textbf{Limitaci\'on:} Los DiD deben interpretarse como descriptivos (pre-trends
         no paralelos). No se puede afirmar causalidad estricta.
 \end{enumerate}
 
 \textbf{Hip\'otesis sustantiva:} La transici\'on SIGA Escritorio $\rightarrow$ SIGA Web
-parece haber simplificado el proceso de registro del CMN, facilitando el cumplimiento
-formal de las tres fases.
+redujo las fricciones en el proceso de registro del CMN, lo que se asocia con el
+incremento en el cumplimiento formal de las tres fases.
 
+%% ============================================================================
+%% REFERENCIAS
+%% ============================================================================
 \section*{Referencias}
 \begin{itemize}
+  \item Blinder, A. S. (1973). ``Wage Discrimination: Reduced Form and Structural Estimates''. \textit{Journal of Human Resources}, 8(4), 436--455.
   \item Cunningham, S. (2021). \textit{Causal Inference: The Mixtape}, cap. 9.5.
-  \item Roth, J. (2022). ``Pretrends in DiD: What to do when parallel trends fail''.
+  \item Oaxaca, R. (1973). ``Male-Female Wage Differentials in Urban Labor Markets''. \textit{International Economic Review}, 14(3), 693--709.
+  \item Roth, J. (2022). ``Pretrends in DiD: What to do when parallel trends fail''. \textit{Journal of Econometrics}.
 \end{itemize}
 
 \end{document}

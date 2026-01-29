@@ -23,11 +23,11 @@ FIGS = OUT / "figures"
 FIGS.mkdir(parents=True, exist_ok=True)
 
 C_MAIN = "#1B4F72"
-C_ACCENT = "#E74C3C"
+C_ACCENT = "#A10115"
 C_GRADIENT = ["#AED6F1", "#5DADE2", "#2E86C1", "#1B4F72", "#0B2F4A"]
 C_PRE = "#BDC3C7"
 C_POST = "#1B4F72"
-C_DELTA = "#27AE60"
+C_DELTA = "#A10115"
 
 plt.rcParams.update({
     "font.family": "sans-serif",

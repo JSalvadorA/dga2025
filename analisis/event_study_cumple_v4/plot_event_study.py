@@ -24,8 +24,8 @@ FIGS.mkdir(parents=True, exist_ok=True)
 
 # Paleta
 C_MAIN = "#1B4F72"
-C_ACCENT = "#E74C3C"
-C_SECONDARY = "#27AE60"
+C_ACCENT = "#A10115"
+C_SECONDARY = "#1B4F72"
 C_GREY = "#BDC3C7"
 C_LIGHT = "#EBF5FB"
 C_CI = "#AED6F1"
@@ -99,7 +99,7 @@ def plot_coeff_part_a() -> None:
     ax.text(2024.65, -0.04, "Post", fontsize=9, color=C_ACCENT, style="italic")
 
     ax.set_xticks(years)
-    ax.set_xlabel("Anio")
+    ax.set_xlabel("A\u00f1o")
     ax.set_ylabel("Coeficiente (cambio en prob. cumple_v4)")
     ax.set_xlim(2021.5, 2025.5)
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1, decimals=0))
@@ -124,7 +124,7 @@ def plot_parallel_trends() -> None:
                 markersize=8, linewidth=2.2, label=label, zorder=3)
 
     # Shaded post
-    ax.axvspan(2024.5, 2025.5, color="#FDEDEC", alpha=0.5, zorder=0)
+    ax.axvspan(2024.5, 2025.5, color="#F6E6E8", alpha=0.5, zorder=0)
     ax.axvline(2024.5, color=C_ACCENT, linestyle="--", linewidth=1, alpha=0.6)
 
     # Annotations
@@ -136,7 +136,7 @@ def plot_parallel_trends() -> None:
                 fontsize=10, color=C_ACCENT, fontweight="bold")
 
     ax.set_xticks([2022, 2023, 2024, 2025])
-    ax.set_xlabel("Anio")
+    ax.set_xlabel("A\u00f1o")
     ax.set_ylabel("Tasa de cumplimiento V4")
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1, decimals=0))
     ax.set_ylim(-0.02, 1.0)
@@ -169,7 +169,7 @@ def plot_coeff_part_b() -> None:
     ax.axvline(2024.5, color=C_ACCENT, linestyle="--", linewidth=1.2, alpha=0.7, zorder=1)
     ax.axhline(0, color="grey", linewidth=0.8, linestyle="-", alpha=0.5)
 
-    ax.vlines(years, ci_lo, ci_hi, color="#F5B7B1", linewidth=3, zorder=2)
+    ax.vlines(years, ci_lo, ci_hi, color="#E2B2B8", linewidth=3, zorder=2)
     ax.scatter(years, betas, color=C_ACCENT, s=80, zorder=3, edgecolors="white", linewidth=1.5)
 
     # Annotation for 2025
@@ -181,7 +181,7 @@ def plot_coeff_part_b() -> None:
     )
 
     ax.set_xticks(years)
-    ax.set_xlabel("Anio")
+    ax.set_xlabel("A\u00f1o")
     ax.set_ylabel("Diferencial SWITCHER - ALWAYS_IN")
     ax.set_xlim(2021.5, 2025.5)
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1, decimals=0))

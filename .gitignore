@@ -18,11 +18,18 @@ env/
 # Jupyter
 .ipynb_checkpoints/
 
-# Data (large files)
+# Data (large files - exclude by default)
 *.parquet
 *.csv
 *.xlsx
+
+# Allow specific data files for reproducibility
 !datos/README.md
+!datos/panel_t1/*.parquet
+!datos/processed/*.parquet
+
+# Exclude markdown outputs from analysis modules
+**/outputs/*.md
 
 # Database
 *.db

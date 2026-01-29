@@ -10,11 +10,27 @@ import argparse
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
 import numpy as np
 import pandas as pd
 
-plt.style.use("seaborn-v0_8-whitegrid")
-COLORS = {"ALWAYS_IN": "#2E86AB", "SWITCHER": "#A23B72", "accent": "#F18F01"}
+C_MAIN = "#1B4F72"
+C_ACCENT = "#A10115"
+C_GREY = "#95A5A6"
+COLORS = {"ALWAYS_IN": C_MAIN, "SWITCHER": C_ACCENT, "accent": C_ACCENT}
+
+plt.rcParams.update({
+    "font.family": "sans-serif",
+    "font.sans-serif": ["Roboto", "DejaVu Sans", "Arial"],
+    "font.size": 10,
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+    "axes.grid": True,
+    "grid.alpha": 0.3,
+    "grid.linewidth": 0.5,
+    "figure.facecolor": "white",
+    "axes.facecolor": "white",
+})
 
 
 def load_results(out_dir: Path) -> dict:
@@ -31,25 +47,25 @@ def plot_balance(results: dict, out_dir: Path) -> None:
     """Grafico de balance: SMD antes vs despues."""
     bal = results["balance"]
 
-    fig, ax = plt.subplots(figsize=(10, 5))
+    fig, ax = plt.subplots(figsize=(6.5, 4.0))
 
     y_pos = np.arange(len(bal))
     width = 0.35
 
-    bars1 = ax.barh(y_pos - width/2, bal["smd_before"].abs(), width, label="Antes del matching", color="#E74C3C", alpha=0.7)
-    bars2 = ax.barh(y_pos + width/2, bal["smd_after"].abs(), width, label="Después del matching", color="#27AE60", alpha=0.7)
+    bars1 = ax.barh(y_pos - width/2, bal["smd_before"].abs(), width, label="Antes del matching", color="#A10115", alpha=0.7)
+    bars2 = ax.barh(y_pos + width/2, bal["smd_after"].abs(), width, label="Después del matching", color=COLORS["ALWAYS_IN"], alpha=0.7)
 
     # Linea de referencia (|SMD| < 0.1 = buen balance)
-    ax.axvline(x=0.1, color="black", linestyle="--", lw=1.5, label="Umbral |SMD| = 0.1")
+    ax.axvline(x=0.1, color=C_GREY, linestyle="--", lw=1.2, label="Umbral |SMD| = 0.1")
 
     ax.set_yticks(y_pos)
     ax.set_yticklabels(bal["variable"].str.replace("log_", "log(") + ")", fontsize=12)
     ax.set_xlabel("| Standardized Mean Difference |", fontsize=12)
-    ax.legend(loc="upper right", fontsize=10)
+    ax.legend(loc="upper left", fontsize=10)
 
     # Anotaciones de reduccion
     for i, row in bal.iterrows():
-        ax.text(0.65, i, f"-{row['reduction_pct']:.0f}%", ha="left", va="center", fontsize=11, fontweight="bold", color="#27AE60")
+        ax.text(0.65, i, f"-{row['reduction_pct']:.0f}%", ha="left", va="center", fontsize=11, fontweight="bold", color=COLORS["ALWAYS_IN"])
 
     ax.set_xlim(0, 0.8)
     plt.tight_layout()
@@ -62,7 +78,7 @@ def plot_pscore_distribution(results: dict, out_dir: Path) -> None:
     """Histograma de propensity scores por grupo."""
     ps = results["pscore"]
 
-    fig, ax = plt.subplots(figsize=(10, 5))
+    fig, ax = plt.subplots(figsize=(6.5, 4.0))
 
     ps_treated = ps[ps["switcher"] == 1]["pscore"]
     ps_control = ps[ps["switcher"] == 0]["pscore"]
@@ -87,7 +103,7 @@ def plot_did_matched(results: dict, out_dir: Path) -> None:
     """DiD en muestra emparejada."""
     d = results["did"]
 
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(6.5, 4.2))
 
     x = np.array([0, 1, 3, 4])
     heights = [
@@ -108,7 +124,8 @@ def plot_did_matched(results: dict, out_dir: Path) -> None:
 
     ax.set_xticks(x)
     ax.set_xticklabels(["Pre\n(matched)", "Post\n(matched)", "Pre\n(matched)", "Post\n(matched)"], fontsize=11)
-    ax.set_ylabel("Tasa cumple_v4 (%)", fontsize=12)
+    ax.set_ylabel("Tasa cumple_v4 (%)", fontsize=11)
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=100, decimals=0))
     ax.set_ylim(0, 105)
     from matplotlib.patches import Patch
     legend_elements = [
@@ -120,7 +137,7 @@ def plot_did_matched(results: dict, out_dir: Path) -> None:
     did_val = d["did_manual"] * 100
     ax.text(0.98, 0.05, f"DiD = {did_val:.1f} pp\n(p = {d['pvalue']:.3f})",
             transform=ax.transAxes, ha="right", va="bottom", fontsize=13, fontweight="bold",
-            bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.8))
+            bbox=dict(boxstyle="round", facecolor="#E8F1FA", alpha=0.9))
 
     plt.tight_layout()
     fig.savefig(out_dir / "fig_psm_did_matched.png", dpi=150, bbox_inches="tight")

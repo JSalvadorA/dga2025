@@ -29,9 +29,9 @@ FIGS.mkdir(parents=True, exist_ok=True)
 
 # --- Paleta ---
 C_MAIN = "#1B4F72"
-C_ACCENT = "#E74C3C"
-C_SECONDARY = "#27AE60"
-C_ORANGE = "#F39C12"
+C_ACCENT = "#A10115"
+C_SECONDARY = "#1B4F72"
+C_ORANGE = "#A10115"
 C_CI = "#AED6F1"
 C_GREY = "#BDC3C7"
 C_LIGHT = "#EBF5FB"
@@ -61,7 +61,7 @@ def panel_a(ax) -> None:
         ax.plot(sub["anio"], sub["rate"], color=color, marker=marker,
                 markersize=6, linewidth=2, label=grp, zorder=3)
 
-    ax.axvspan(2024.5, 2025.5, color="#FDEDEC", alpha=0.4, zorder=0)
+    ax.axvspan(2024.5, 2025.5, color="#F6E6E8", alpha=0.4, zorder=0)
     ax.axvline(2024.5, color=C_ACCENT, linestyle="--", linewidth=0.8, alpha=0.5)
 
     ax.set_xticks([2022, 2023, 2024, 2025])
@@ -125,7 +125,7 @@ def panel_c(ax) -> None:
     ax.set_xticks(x)
     ax.set_xticklabels(periods, fontsize=9)
     ax.set_ylabel("pp")
-    ax.legend(loc="lower left", fontsize=7, framealpha=0.8)
+    ax.legend(loc="upper left", fontsize=7, framealpha=0.8)
 
 
 def panel_d(ax) -> None:
