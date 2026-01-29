@@ -69,7 +69,7 @@ dga2025/
 
 | Desafío | Solución |
 |---------|----------|
-| Normativa densa y dispersa (6 instrumentos legales) | RAG con PostgreSQL + pgvector para consultas semánticas |
+| Normativa densa y dispersa (6 instrumentos legales) | Búsqueda estructurada en PostgreSQL |
 | Datos voluminosos e inconsistentes (SIGA MEF, SIGA MINEDU, padrones DPIP) | Modelo relacional PostgreSQL (esquemas `raw`→`dwh`→`mart`) |
 | Sin datos presupuestales consolidados para +2,800 UEs | Web scraping del portal Consulta Amigable MEF |
 | Sin grupo de control puro ni variable para RD | Triangulación: Event Study, DiD+PSM, Oaxaca-Blinder |
@@ -103,7 +103,7 @@ dga2025/
 ## Stack Tecnológico
 
 - **Lenguaje**: Python 3.10+
-- **Base de datos**: PostgreSQL 15 + pgvector
+- **Base de datos**: PostgreSQL 15
 - **Web scraping**: Selenium + ChromeDriver
 - **Análisis estadístico**: statsmodels, linearmodels
 - **Visualización**: matplotlib, seaborn
